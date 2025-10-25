@@ -14,3 +14,11 @@ export interface Item {
   name: string;
   data?: DeviceData | null;
 }
+
+export interface Usuario {
+  _id?: string;
+  nombre: string;
+  apellido: string;
+  email: string;
+  genero: string;
+}

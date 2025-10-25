@@ -1,7 +1,7 @@
 <!-- src/app/components/gestion-items/gestion-items.component.html -->
 
 <div class="container">
-  <h1>Gestión de Dispositivos</h1>
+  <h1>Gestión de Usuarios</h1>
 
   <!-- Mensaje de error -->
   <div *ngIf="errorMessage" class="alert alert-danger">
@@ -14,11 +14,11 @@
   </div>
 
   <div class="row">
-    <!-- Columna izquierda: Tabla de items -->
+    <!-- Columna izquierda: Tabla de usuarios -->
     <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          <h3>Lista de Dispositivos</h3>
+          <h3>Lista de Usuarios</h3>
           <button class="btn btn-primary" (click)="createNew()">
             Agregar Nuevo
           </button>
@@ -29,37 +29,34 @@
               <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Detalles</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Género</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr 
-                *ngFor="let item of items" 
-                (click)="selectItem(item)"
-                [class.selected]="selectedItem?.id === item.id"
+                *ngFor="let usuario of usuarios" 
+                (click)="selectUsuario(usuario)"
+                [class.selected]="selectedUsuario?._id === usuario._id"
               >
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>
-                  <span *ngIf="item.data">
-                    <span *ngIf="item.data.color">Color: {{ item.data.color }}</span>
-                    <span *ngIf="item.data.capacity"> | Capacidad: {{ item.data.capacity }}</span>
-                    <span *ngIf="item.data.price"> | Precio: ${{ item.data.price }}</span>
-                  </span>
-                  <span *ngIf="!item.data">-</span>
-                </td>
+                <td>{{ usuario._id }}</td>
+                <td>{{ usuario.nombre }}</td>
+                <td>{{ usuario.apellido }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>{{ usuario.genero }}</td>
                 <td>
                   <button 
                     class="btn btn-sm btn-danger" 
-                    (click)="deleteItem(item.id!); $event.stopPropagation()"
+                    (click)="deleteUsuario(usuario._id!); $event.stopPropagation()"
                   >
                     Eliminar
                   </button>
                 </td>
               </tr>
-              <tr *ngIf="items.length === 0 && !isLoading">
-                <td colspan="4" class="text-center">No hay dispositivos disponibles</td>
+              <tr *ngIf="usuarios.length === 0 && !isLoading">
+                <td colspan="6" class="text-center">No hay usuarios disponibles</td>
               </tr>
             </tbody>
           </table>
@@ -69,89 +66,67 @@
 
     <!-- Columna derecha: Formulario de edición/creación -->
     <div class="col-md-6">
-      <div class="card" *ngIf="selectedItem">
+      <div class="card" *ngIf="selectedUsuario">
         <div class="card-header">
-          <h3>{{ selectedItem.id ? 'Editar Dispositivo' : 'Nuevo Dispositivo' }}</h3>
+          <h3>{{ selectedUsuario._id ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
         </div>
         <div class="card-body">
-          <form #itemForm="ngForm">
+          <form #usuarioForm="ngForm">
             <div class="form-group">
               <label>ID:</label>
               <input 
                 type="text" 
                 class="form-control" 
-                [value]="selectedItem.id || 'Auto-generado'"
+                [value]="selectedUsuario._id || 'Auto-generado'"
                 disabled
               >
             </div>
 
             <div class="form-group">
-              <label>Nombre del Dispositivo: *</label>
+              <label>Nombre: *</label>
               <input 
                 type="text" 
                 class="form-control" 
-                [(ngModel)]="selectedItem.name"
-                name="name"
-                placeholder="Ej: Apple iPhone 15 Pro"
+                [(ngModel)]="selectedUsuario.nombre"
+                name="nombre"
+                placeholder="Ej: Juan"
                 required
               >
             </div>
 
-            <h4 class="data-title">Datos Adicionales</h4>
-
             <div class="form-group">
-              <label>Color:</label>
+              <label>Apellido: *</label>
               <input 
                 type="text" 
                 class="form-control" 
-                [(ngModel)]="selectedItem.data!.color"
-                name="color"
-                placeholder="Ej: Black"
+                [(ngModel)]="selectedUsuario.apellido"
+                name="apellido"
+                placeholder="Ej: Pérez"
+                required
               >
             </div>
 
             <div class="form-group">
-              <label>Capacidad:</label>
+              <label>Email: *</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                [(ngModel)]="selectedUsuario.email"
+                name="email"
+                placeholder="Ej: juan@email.com"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Género: *</label>
               <input 
                 type="text" 
                 class="form-control" 
-                [(ngModel)]="selectedItem.data!.capacity"
-                name="capacity"
-                placeholder="Ej: 256 GB"
-              >
-            </div>
-
-            <div class="form-group">
-              <label>Precio:</label>
-              <input 
-                type="number" 
-                class="form-control" 
-                [(ngModel)]="selectedItem.data!.price"
-                name="price"
-                placeholder="Ej: 999.99"
-                step="0.01"
-              >
-            </div>
-
-            <div class="form-group">
-              <label>Año:</label>
-              <input 
-                type="number" 
-                class="form-control" 
-                [(ngModel)]="selectedItem.data!.year"
-                name="year"
-                placeholder="Ej: 2024"
-              >
-            </div>
-
-            <div class="form-group">
-              <label>Generación:</label>
-              <input 
-                type="text" 
-                class="form-control" 
-                [(ngModel)]="selectedItem.data!.generation"
-                name="generation"
-                placeholder="Ej: 5th Gen"
+                [(ngModel)]="selectedUsuario.genero"
+                name="genero"
+                placeholder="Ej: Masculino"
+                required
               >
             </div>
 
@@ -159,9 +134,9 @@
               <button 
                 type="button" 
                 class="btn btn-success" 
-                *ngIf="!selectedItem.id"
-                (click)="addItem(selectedItem)"
-                [disabled]="!itemForm.form.valid"
+                *ngIf="!selectedUsuario._id"
+                (click)="addUsuario(selectedUsuario)"
+                [disabled]="!usuarioForm.form.valid"
               >
                 Guardar Nuevo
               </button>
@@ -169,9 +144,9 @@
               <button 
                 type="button" 
                 class="btn btn-primary" 
-                *ngIf="selectedItem.id"
-                (click)="updateItem(selectedItem)"
-                [disabled]="!itemForm.form.valid"
+                *ngIf="selectedUsuario._id"
+                (click)="updateUsuario(selectedUsuario)"
+                [disabled]="!usuarioForm.form.valid"
               >
                 Actualizar
               </button>
@@ -188,9 +163,9 @@
         </div>
       </div>
 
-      <div class="card" *ngIf="!selectedItem">
+      <div class="card" *ngIf="!selectedUsuario">
         <div class="card-body text-center">
-          <p>Selecciona un dispositivo de la lista o crea uno nuevo</p>
+          <p>Selecciona un usuario de la lista o crea uno nuevo</p>
         </div>
       </div>
     </div>

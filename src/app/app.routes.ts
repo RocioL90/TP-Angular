@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { GestionItemsComponent } from './components/gestion-items/gestion-items.component';
+import { UsuarioComponent } from './components/usuario/usuario.component';
 
 export const routes: Routes = [
-  { path: '', component: GestionItemsComponent },
+  { path: '', component: UsuarioComponent },
   { path: '**', redirectTo: '' }
 ];

@@ -3,13 +3,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Item } from '../models/item.model';
+import { Usuario } from '../models/item.model';
 
 @Injectable({
   providedIn: 'root'  // <-- Esto hace que esté disponible en toda la app
 })
 export class ApiService {
-  private apiUrl = 'https://api.restful-api.dev/objects';
+  private apiUrl = 'https://crudcrud.com/api/6deb10e3ca5c46a6bcd1111f0065b4c1/usuarios';
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -19,20 +19,25 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<Item[]> {
-    return this.http.get<Item[]>(this.apiUrl);
+  getAll(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(this.apiUrl);
   }
 
-  getById(id: string): Observable<Item> {
-    return this.http.get<Item>(`${this.apiUrl}/${id}`);
+  getById(id: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
   }
 
-  create(item: Item): Observable<Item> {
-    return this.http.post<Item>(this.apiUrl, item, this.httpOptions);
+  create(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(this.apiUrl, usuario, this.httpOptions);
   }
 
-  update(id: string, item: Item): Observable<Item> {
-    return this.http.put<Item>(`${this.apiUrl}/${id}`, item, this.httpOptions);
+  update(id: string, usuario: Usuario): Observable<Usuario> {
+    console.log('ApiService.update called with:');
+    console.log('ID:', id);
+    console.log('Usuario:', usuario);
+    console.log('URL:', `${this.apiUrl}/${id}`);
+    
+    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuario, this.httpOptions);
   }
 
   delete(id: string): Observable<any> {
