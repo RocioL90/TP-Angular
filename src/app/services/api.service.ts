@@ -1,12 +1,10 @@
-// src/app/services/api.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '../models/item.model';
+import { Usuario } from '../models/usuario.model';
 
 @Injectable({
-  providedIn: 'root'  // <-- Esto hace que esté disponible en toda la app
+  providedIn: 'root'  // Disponible en toda la app
 })
 export class ApiService {
   private apiUrl = 'https://crudcrud.com/api/6deb10e3ca5c46a6bcd1111f0065b4c1/usuarios';
@@ -17,29 +15,37 @@ export class ApiService {
     })
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
+  // Obtener todos los usuarios
   getAll(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.apiUrl);
   }
 
+  // Obtener un usuario por su ID
   getById(id: string): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
   }
 
+  // Crear un nuevo usuario
   create(usuario: Usuario): Observable<Usuario> {
     return this.http.post<Usuario>(this.apiUrl, usuario, this.httpOptions);
   }
 
+  // Actualizar un usuario existente
   update(id: string, usuario: Usuario): Observable<Usuario> {
-    console.log('ApiService.update called with:');
-    console.log('ID:', id);
-    console.log('Usuario:', usuario);
-    console.log('URL:', `${this.apiUrl}/${id}`);
-    
-    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuario, this.httpOptions);
+    // ✅ Crear una copia sin el campo id/_id porque crudcrud NO permite enviarlo
+    const usuarioSinId = { ...usuario };
+    delete (usuarioSinId as any)._id;
+    delete (usuarioSinId as any).id;
+
+    console.log('Actualizando usuario con ID:', id);
+    console.log('Datos enviados:', usuarioSinId);
+
+    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuarioSinId, this.httpOptions);
   }
 
+  // Eliminar un usuario
   delete(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`, this.httpOptions);
   }
