@@ -45,7 +45,7 @@ export class UsuarioComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar usuarios:', error);
-        this.errorMessage = 'Error al cargar los datos';
+        this.errorMessage = 'Error al cargar los datos. Intente nuevamente.';
         this.isLoading = false;
       }
     });
@@ -71,7 +71,6 @@ export class UsuarioComponent implements OnInit {
   }
 
   editUsuario(usuario: Usuario): void {
-    console.log('editUsuario called with:', usuario);
     this.selectedUsuario = {
       _id: usuario._id,
       nombre: usuario.nombre,
@@ -80,46 +79,32 @@ export class UsuarioComponent implements OnInit {
       genero: usuario.genero
     };
     this.showPopup = true;
-    console.log('selectedUsuario after copy:', this.selectedUsuario);
   }
 
   updateObject(): void {
-    console.log('updateObject called');
-    console.log('selectedUsuario:', this.selectedUsuario);
-    
     if (!this.selectedUsuario) {
-      console.error('No hay usuario seleccionado');
       alert('No hay usuario seleccionado para actualizar');
       return;
     }
 
     if (!this.selectedUsuario._id) {
-      console.error('El usuario no tiene ID');
       alert('El usuario no tiene ID válido');
       return;
     }
 
     if (!this.selectedUsuario.nombre || !this.selectedUsuario.apellido || !this.selectedUsuario.email || !this.selectedUsuario.genero) {
-      console.error('Campos incompletos:', this.selectedUsuario);
       alert('Por favor completa todos los campos');
       return;
     }
 
-    console.log('Enviando actualización para usuario ID:', this.selectedUsuario._id);
-    console.log('Datos a enviar:', this.selectedUsuario);
-
     this.apiService.update(this.selectedUsuario._id, this.selectedUsuario).subscribe({
       next: (response) => {
-        console.log('Actualización exitosa:', response);
         this.loadUsuarios();
         this.closePopup();
         alert('Usuario actualizado exitosamente');
       },
       error: (error) => {
-        console.error('Error completo al actualizar usuario:', error);
-        console.error('Error status:', error.status);
-        console.error('Error message:', error.message);
-        console.error('Error body:', error.error);
+        console.error('Error al actualizar usuario:', error);
         alert(`Error al actualizar el usuario: ${error.message || 'Error desconocido'}`);
       }
     });
