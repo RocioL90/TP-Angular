@@ -7,7 +7,7 @@ import { Usuario } from '../models/usuario.model';
   providedIn: 'root'  // Disponible en toda la app
 })
 export class ApiService {
-  private apiUrl = 'https://crudcrud.com/api/6deb10e3ca5c46a6bcd1111f0065b4c1/usuarios';
+  private apiUrl = 'https://crudcrud.com/api/871094af3dae412ab7ea99855fdccf26/usuarios';
 
   private httpOptions = {
     headers: new HttpHeaders({

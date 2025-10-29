@@ -20,7 +20,6 @@ export class UsuarioComponent implements OnInit {
   errorMessage = '';
   showPopup = false;
 
-  // Form fields for adding new usuario
   newUsuario: Usuario = {
     nombre: '',
     apellido: '',
