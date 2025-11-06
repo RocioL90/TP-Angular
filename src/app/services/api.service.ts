@@ -7,7 +7,7 @@ import { Usuario } from '../models/usuario.model';
   providedIn: 'root'  // Disponible en toda la app
 })
 export class ApiService {
-  private apiUrl = 'https://crudcrud.com/api/871094af3dae412ab7ea99855fdccf26/usuarios';
+  private apiUrl = 'https://crudcrud.com/api/ffbe7f7cbd244090951d2d57f8ae6023/usuarios';
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -34,7 +34,7 @@ export class ApiService {
 
   // Actualizar un usuario existente
   update(id: string, usuario: Usuario): Observable<Usuario> {
-    // ✅ Crear una copia sin el campo id/_id porque crudcrud NO permite enviarlo
+    // Crear una copia sin el campo id/_id porque crudcrud NO permite enviarlo
     const usuarioSinId = { ...usuario };
     delete (usuarioSinId as any)._id;
     delete (usuarioSinId as any).id;

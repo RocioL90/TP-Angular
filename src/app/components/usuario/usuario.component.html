@@ -1,17 +1,18 @@
-<!-- src/app/components/usuario/usuario.component.html -->
-
 <div class="container">
   <h1>CRUD - APIREST</h1>
 
-  <!-- Mensaje de error -->
-  <div *ngIf="errorMessage" class="alert alert-danger">
+  @if(errorMessage){
+  <div class="alert alert-danger">
     {{ errorMessage }}
   </div>
+  }
 
   <!-- Loader -->
-  <div *ngIf="isLoading" class="loader">
+   @if(isLoading){
+  <div class="loader">
     Cargando...
   </div>
+  }
 
   <table>
     <thead>
@@ -39,9 +40,11 @@
           <button class="btn btn-delete" (click)="deleteUsuario(usuario._id!)">ELIMINAR</button>
         </td>
       </tr>
-      <tr *ngIf="usuarios.length === 0 && !isLoading">
+      @if(usuarios.length === 0 && !isLoading){
+      <tr >
         <td colspan="7" class="text-center">No hay usuarios disponibles</td>
       </tr>
+      }
     </tbody>
     <tfoot>
       <tr>
@@ -58,27 +61,28 @@
   </table>
 
   <!-- Popup Modal -->
-  <div id='popUp' *ngIf="showPopup && selectedUsuario">
+  @if(showPopup && selectedUsuario){
+  <div id='popUp'>
     <table>
       <tr>
         <td><label for='id2'>ID</label></td>
-        <td><input id='id2' name='id2' class="inputPopUp" [value]="selectedUsuario._id" readonly /></td>
+        <td><input id='id2' name='id2' class="inputPopUp" [value]="selectedUsuario!._id" readonly /></td>
       </tr>
       <tr>
         <td><label for='name2'>NOMBRE</label></td>
-        <td><input id='name2' name='name2' class="inputPopUp" [(ngModel)]="selectedUsuario.nombre" /></td>
+        <td><input id='name2' name='name2' class="inputPopUp" [(ngModel)]="selectedUsuario!.nombre" /></td>
       </tr>
       <tr>
         <td><label for='lastName2'>APELLIDO</label></td>
-        <td><input id='lastName2' name='lastName2' class="inputPopUp" [(ngModel)]="selectedUsuario.apellido" /></td>
+        <td><input id='lastName2' name='lastName2' class="inputPopUp" [(ngModel)]="selectedUsuario!.apellido" /></td>
       </tr>
       <tr>
         <td><label for='email2'>EMAIL</label></td>
-        <td><input id='email2' name='email2' class="inputPopUp" [(ngModel)]="selectedUsuario.email" /></td>
+        <td><input id='email2' name='email2' class="inputPopUp" [(ngModel)]="selectedUsuario!.email" /></td>
       </tr>
       <tr>
         <td><label for='gender2'>GENERO</label></td>
-        <td><input id='gender2' name='gender2' class="inputPopUp" [(ngModel)]="selectedUsuario.genero" /></td>
+        <td><input id='gender2' name='gender2' class="inputPopUp" [(ngModel)]="selectedUsuario!.genero" /></td>
       </tr>
       <tr>
         <td colspan='2' style='text-align: center'>
@@ -88,4 +92,5 @@
       </tr>
     </table>
   </div>
+  }
 </div>
