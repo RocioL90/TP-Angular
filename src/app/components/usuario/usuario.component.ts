@@ -1,10 +1,8 @@
-// src/app/components/usuario/usuario.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
-import { Usuario } from '../../models/usuario.model';
+import { Car } from '../../models/car.model';
 
 @Component({
   selector: 'app-usuario',
@@ -14,20 +12,25 @@ import { Usuario } from '../../models/usuario.model';
   styleUrls: ['./usuario.component.css']
 })
 export class UsuarioComponent implements OnInit {
-  usuarios: Usuario[] = [];
-  selectedUsuario: Usuario | null = null;
+  usuarios: Car[] = [];
+  selectedUsuario: Car | null = null;
   isLoading = false;
   errorMessage = '';
   showPopup = false;
 
-  newUsuario: Usuario = {
-    nombre: '',
-    apellido: '',
-    email: '',
-    genero: ''
+  newUsuario: Car = {
+    brand: '',
+    model: '',
+    year: new Date().getFullYear(),
+    color: ''
   };
 
   constructor(private apiService: ApiService) { }
+
+  // trackBy for *ngFor performance and stable tracking
+  trackById(index: number, item: Car) {
+    return item.id;
+  }
 
   ngOnInit(): void {
     this.loadUsuarios();
@@ -51,7 +54,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   saveObject(): void {
-    if (!this.newUsuario.nombre || !this.newUsuario.apellido || !this.newUsuario.email || !this.newUsuario.genero) {
+    if (!this.newUsuario.brand || !this.newUsuario.model || !this.newUsuario.year || !this.newUsuario.color) {
       alert('Por favor completa todos los campos');
       return;
     }
@@ -69,56 +72,52 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  editUsuario(usuario: Usuario): void {
-    this.selectedUsuario = {
-      _id: usuario._id,
-      nombre: usuario.nombre,
-      apellido: usuario.apellido,
-      email: usuario.email,
-      genero: usuario.genero
-    };
+  editUsuario(usuario: Car): void {
+    this.selectedUsuario = { ...usuario };
     this.showPopup = true;
   }
 
   updateObject(): void {
     if (!this.selectedUsuario) {
-      alert('No hay usuario seleccionado para actualizar');
+      alert('No hay elemento seleccionado para actualizar');
       return;
     }
 
-    if (!this.selectedUsuario._id) {
-      alert('El usuario no tiene ID válido');
+    const id = this.selectedUsuario.id;
+    if (id === undefined || id === null) {
+      alert('El elemento no tiene ID válido');
       return;
     }
 
-    if (!this.selectedUsuario.nombre || !this.selectedUsuario.apellido || !this.selectedUsuario.email || !this.selectedUsuario.genero) {
+    // Validación simple
+    if (!this.selectedUsuario.brand || !this.selectedUsuario.model || !this.selectedUsuario.year || !this.selectedUsuario.color) {
       alert('Por favor completa todos los campos');
       return;
     }
 
-    this.apiService.update(this.selectedUsuario._id, this.selectedUsuario).subscribe({
+    this.apiService.update(id, this.selectedUsuario).subscribe({
       next: (response) => {
         this.loadUsuarios();
         this.closePopup();
-        alert('Usuario actualizado exitosamente');
+        alert('Elemento actualizado exitosamente');
       },
       error: (error) => {
-        console.error('Error al actualizar usuario:', error);
-        alert(`Error al actualizar el usuario: ${error.message || 'Error desconocido'}`);
+        console.error('Error al actualizar elemento:', error);
+        alert(`Error al actualizar: ${error.message || 'Error desconocido'}`);
       }
     });
   }
 
-  deleteUsuario(id: string): void {
-    if (confirm('¿Estás seguro de eliminar este usuario?')) {
+  deleteUsuario(id: number): void {
+    if (confirm('¿Estás seguro de eliminar este elemento?')) {
       this.apiService.delete(id).subscribe({
         next: () => {
           this.loadUsuarios();
-          alert('Usuario eliminado exitosamente');
+          alert('Elemento eliminado exitosamente');
         },
         error: (error) => {
-          console.error('Error al eliminar usuario:', error);
-          alert('Error al eliminar el usuario');
+          console.error('Error al eliminar elemento:', error);
+          alert('Error al eliminar el elemento');
         }
       });
     }
@@ -126,10 +125,10 @@ export class UsuarioComponent implements OnInit {
 
   clearNewUsuarioForm(): void {
     this.newUsuario = {
-      nombre: '',
-      apellido: '',
-      email: '',
-      genero: ''
+      brand: '',
+      model: '',
+      year: new Date().getFullYear(),
+      color: ''
     };
   }
 

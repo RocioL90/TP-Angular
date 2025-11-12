@@ -1,52 +1,50 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '../models/usuario.model';
+import { tap } from 'rxjs/operators';
+import { Car } from '../models/car.model';
 
 @Injectable({
-  providedIn: 'root'  // Disponible en toda la app
+  providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://crudcrud.com/api/ffbe7f7cbd244090951d2d57f8ae6023/usuarios';
-
-  private httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
+  // Usar ruta local que será proxy-eada
+  private apiUrl = '/api/cars';
 
   constructor(private http: HttpClient) {}
 
-  // Obtener todos los usuarios
-  getAll(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.apiUrl);
+  getAll(): Observable<Car[]> {
+    console.log('🔍 Obteniendo todos los autos...');
+    return this.http.get<Car[]>(this.apiUrl).pipe(
+      tap(data => console.log('✅ Autos recibidos:', data))
+    );
   }
 
-  // Obtener un usuario por su ID
-  getById(id: string): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
+  getById(id: number): Observable<Car> {
+    return this.http.get<Car>(`${this.apiUrl}/${id}`);
   }
 
-  // Crear un nuevo usuario
-  create(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(this.apiUrl, usuario, this.httpOptions);
+  create(car: Car): Observable<Car> {
+    console.log('➕ Creando auto:', car);
+    return this.http.post<Car>(this.apiUrl, car).pipe(
+      tap(response => console.log('✅ Auto creado:', response))
+    );
   }
 
-  // Actualizar un usuario existente
-  update(id: string, usuario: Usuario): Observable<Usuario> {
-    // Crear una copia sin el campo id/_id porque crudcrud NO permite enviarlo
-    const usuarioSinId = { ...usuario };
-    delete (usuarioSinId as any)._id;
-    delete (usuarioSinId as any).id;
+  update(id: number, car: Car): Observable<Car> {
+    const carSinId = { ...car };
+    delete (carSinId as any).id;
 
-    console.log('Actualizando usuario con ID:', id);
-    console.log('Datos enviados:', usuarioSinId);
-
-    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuarioSinId, this.httpOptions);
+    console.log('✏️ Actualizando auto ID:', id, 'Datos:', carSinId);
+    return this.http.put<Car>(`${this.apiUrl}/${id}`, carSinId).pipe(
+      tap(response => console.log('✅ Auto actualizado:', response))
+    );
   }
 
-  // Eliminar un usuario
-  delete(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`, this.httpOptions);
+  delete(id: number): Observable<any> {
+    console.log('🗑️ Eliminando auto ID:', id);
+    return this.http.delete<any>(`${this.apiUrl}/${id}`).pipe(
+      tap(response => console.log('✅ Auto eliminado:', response))
+    );
   }
 }

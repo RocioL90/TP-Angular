@@ -1,96 +1,77 @@
 <div class="container">
-  <h1>CRUD - APIREST</h1>
+  <h1>CRUD - APIREST AUTOS</h1>
 
-  @if(errorMessage){
-  <div class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
-  }
-
-  <!-- Loader -->
-   @if(isLoading){
-  <div class="loader">
-    Cargando...
-  </div>
-  }
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  <div *ngIf="isLoading" class="loader">Cargando...</div>
 
   <table>
     <thead>
       <tr>
         <th>ID</th>
-        <th>NOMBRE</th>
-        <th>APELLIDO</th>
-        <th>EMAIL</th>
-        <th>GENERO</th>
-        <th>ACCION</th>
-        <th colspan='2'></th>
+        <th>MARCA</th>
+        <th>MODELO</th>
+        <th>AÑO</th>
+        <th>COLOR</th>
+        <th colspan="2">ACCION</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let usuario of usuarios">
-        <td>{{ usuario._id }}</td>
-        <td>{{ usuario.nombre }}</td>
-        <td>{{ usuario.apellido }}</td>
-        <td>{{ usuario.email }}</td>
-        <td>{{ usuario.genero }}</td>
+      <tr *ngFor="let usuario of usuarios; trackBy: trackById">
+        <td>{{ usuario.id }}</td>
+        <td>{{ usuario.brand }}</td>
+        <td>{{ usuario.model }}</td>
+        <td>{{ usuario.year }}</td>
+        <td>{{ usuario.color }}</td>
         <td>
           <button class="btn btn-edit" (click)="editUsuario(usuario)">EDITAR</button>
         </td>
         <td>
-          <button class="btn btn-delete" (click)="deleteUsuario(usuario._id!)">ELIMINAR</button>
+          <button class="btn btn-delete" (click)="deleteUsuario(usuario.id!)">ELIMINAR</button>
         </td>
       </tr>
-      @if(usuarios.length === 0 && !isLoading){
-      <tr >
-        <td colspan="7" class="text-center">No hay usuarios disponibles</td>
+      <tr *ngIf="usuarios.length === 0 && !isLoading">
+        <td colspan="7" class="text-center">No hay autos disponibles</td>
       </tr>
-      }
     </tbody>
     <tfoot>
       <tr>
         <td></td>
-        <td><input id='name' [(ngModel)]="newUsuario.nombre" placeholder="Nombre"/></td>
-        <td><input id='lastName' [(ngModel)]="newUsuario.apellido" placeholder="Apellido"/></td>
-        <td><input id='email' [(ngModel)]="newUsuario.email" placeholder="Email"/></td>
-        <td><input id='gender' [(ngModel)]="newUsuario.genero" placeholder="Género"/></td>
-        <td colspan='2' style='text-align: center'>
+        <td><input [(ngModel)]="newUsuario.brand" placeholder="Marca"></td>
+        <td><input [(ngModel)]="newUsuario.model" placeholder="Modelo"></td>
+        <td><input type="number" [(ngModel)]="newUsuario.year" placeholder="Año"></td>
+        <td><input [(ngModel)]="newUsuario.color" placeholder="Color"></td>
+        <td colspan="2" style="text-align: center">
           <button class="btn btn-add" (click)="saveObject()">AGREGAR</button>
         </td>
       </tr>
     </tfoot>
   </table>
 
-  <!-- Popup Modal -->
-  @if(showPopup && selectedUsuario){
-  <div id='popUp'>
-    <table>
-      <tr>
-        <td><label for='id2'>ID</label></td>
-        <td><input id='id2' name='id2' class="inputPopUp" [value]="selectedUsuario!._id" readonly /></td>
-      </tr>
-      <tr>
-        <td><label for='name2'>NOMBRE</label></td>
-        <td><input id='name2' name='name2' class="inputPopUp" [(ngModel)]="selectedUsuario!.nombre" /></td>
-      </tr>
-      <tr>
-        <td><label for='lastName2'>APELLIDO</label></td>
-        <td><input id='lastName2' name='lastName2' class="inputPopUp" [(ngModel)]="selectedUsuario!.apellido" /></td>
-      </tr>
-      <tr>
-        <td><label for='email2'>EMAIL</label></td>
-        <td><input id='email2' name='email2' class="inputPopUp" [(ngModel)]="selectedUsuario!.email" /></td>
-      </tr>
-      <tr>
-        <td><label for='gender2'>GENERO</label></td>
-        <td><input id='gender2' name='gender2' class="inputPopUp" [(ngModel)]="selectedUsuario!.genero" /></td>
-      </tr>
-      <tr>
-        <td colspan='2' style='text-align: center'>
-          <button class="btn btn-add" (click)="updateObject()">ACTUALIZAR</button>
-          <button class="btn btn-cancel" (click)="closePopup()">CANCELAR</button>
-        </td>
-      </tr>
-    </table>
+  <div *ngIf="showPopup && selectedUsuario" id="popUp">
+    <h2>Editar Auto</h2>
+    <div>
+      <label>ID:</label>
+      <input class="inputPopUp" [value]="selectedUsuario.id" readonly>
+    </div>
+    <div>
+      <label>MARCA:</label>
+      <input class="inputPopUp" [(ngModel)]="selectedUsuario.brand">
+    </div>
+    <div>
+      <label>MODELO:</label>
+      <input class="inputPopUp" [(ngModel)]="selectedUsuario.model">
+    </div>
+    <div>
+      <label>AÑO:</label>
+      <input type="number" class="inputPopUp" [(ngModel)]="selectedUsuario.year">
+    </div>
+    <div>
+      <label>COLOR:</label>
+      <input class="inputPopUp" [(ngModel)]="selectedUsuario.color">
+    </div>
+    <div>
+      <button class="btn btn-add" (click)="updateObject()">ACTUALIZAR</button>
+      <button class="btn btn-cancel" (click)="closePopup()">CANCELAR</button>
+    </div>
   </div>
-  }
 </div>
