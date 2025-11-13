@@ -12,7 +12,7 @@ import { Car } from '../../models/car.model';
   styleUrls: ['./usuario.component.css']
 })
 export class UsuarioComponent implements OnInit {
-  usuarios: Car[] = [];  // Cambiar nombre si quieres
+  usuarios: Car[] = [];  
   selectedUsuario: Car | null = null;
   isLoading = false;
   errorMessage = '';
@@ -27,7 +27,7 @@ export class UsuarioComponent implements OnInit {
 
   constructor(private apiService: ApiService) { }
 
-  // trackBy for *ngFor used by the template
+  
   trackById(index: number, item: Car) {
     return item.id;
   }

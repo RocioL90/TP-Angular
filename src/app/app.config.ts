@@ -1,4 +1,4 @@
-// src/app/app.config.ts
+
 
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -8,6 +8,6 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient()  // <-- Importante: Para consumir la API
+    provideHttpClient()  // Para consumir la API
   ]
 };

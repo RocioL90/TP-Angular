@@ -27,7 +27,7 @@ export class UsuarioComponent implements OnInit {
 
   constructor(private apiService: ApiService) { }
 
-  // trackBy for *ngFor performance and stable tracking
+  
   trackById(index: number, item: Car) {
     return item.id;
   }
@@ -63,7 +63,7 @@ export class UsuarioComponent implements OnInit {
       next: (newUsuario) => {
         this.loadUsuarios();
         this.clearNewUsuarioForm();
-        alert('Usuario agregado exitosamente');
+        alert('Auto agregado exitosamente');
       },
       error: (error) => {
         console.error('Error al agregar usuario:', error);

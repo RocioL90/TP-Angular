@@ -8,7 +8,7 @@ import { Car } from '../models/car.model';
   providedIn: 'root'
 })
 export class ApiService {
-  // Usar ruta local que será proxy-eada
+  
   private apiUrl = '/api/cars';
 
   constructor(private http: HttpClient) {}
